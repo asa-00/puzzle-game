@@ -1,0 +1,9 @@
+// src/styles/_mixins.scss
+@mixin button-style {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: $primary-color;
+    color: white;
+  }

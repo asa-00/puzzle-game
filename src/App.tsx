@@ -1,26 +1,27 @@
+// src/App.tsx
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import StartScreen from './components/StartScreen';
+import GameBoard from './components/GameBoard';
+import Leaderboard from './components/Leaderboard';
+import { useGameLogic } from './hooks/useGameLogic';
+import GameOverScreen from './components/GameOverScreen';
+import './App.scss';
 
-function App() {
+const App: React.FC = () => {
+  const { gameState, startGame, endGame } = useGameLogic();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      {gameState.isGameOver ? (
+        <GameOverScreen onRestart={startGame} score={gameState.score} />
+      ) : gameState.isGameStarted ? (
+        <GameBoard onEndGame={endGame} />
+      ) : (
+        <StartScreen onStart={startGame} />
+      )}
+      <Leaderboard />
     </div>
   );
-}
+};
 
 export default App;
