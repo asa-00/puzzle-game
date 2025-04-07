@@ -1,0 +1,94 @@
+.game-over-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #1a2a3a, #0d1b2a);
+  color: #cceeff;
+  animation: fadeInGameOver 1s ease-in-out;
+  text-align: center;
+}
+
+.game-over-screen h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 8px #88ccff;
+}
+
+.game-over-screen p {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  color: #d8f0f5;
+}
+
+.game-over-screen .button-group {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.game-over-screen .button-group button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
+  background-color: #88ccff;
+  color: #003344;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 12px #88ccff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.game-over-screen .button-group button:hover {
+  background-color: #66bbee;
+}
+
+.game-over-screen .leaderboard {
+  max-width: 400px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  box-shadow: 0 0 20px #88ccff77;
+  animation: floatLeaderboard 1.5s ease-in-out infinite alternate;
+}
+
+.game-over-screen .leaderboard h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #cceeff;
+  text-shadow: 0 0 4px #66ccff;
+}
+
+.game-over-screen .leaderboard ul {
+  list-style: none;
+  padding: 0;
+}
+
+.game-over-screen .leaderboard ul li {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #d8f0f5;
+}
+
+@keyframes fadeInGameOver {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatLeaderboard {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-5px);
+  }
+}

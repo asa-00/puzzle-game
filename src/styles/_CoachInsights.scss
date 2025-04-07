@@ -1,0 +1,67 @@
+.coach-insights {
+    margin-top: 2rem;
+    padding: 1.5rem 2rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid #00ffff44;
+    border-radius: 1.5rem;
+    color: #e0f7fa;
+    max-width: 600px;
+    width: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0 0 20px #00ffff33;
+    transition: all 0.3s ease;
+  
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+      color: #00ffff;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+  
+    .insight-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #ffffff22;
+  
+      &:last-child {
+        border-bottom: none;
+      }
+  
+      .label {
+        font-weight: 500;
+        font-size: 0.95rem;
+        color: #a0e7e5;
+      }
+  
+      .value {
+        font-size: 1rem;
+        font-weight: bold;
+        color: #ffffffcc;
+        text-shadow: 0 0 5px #00ffff66;
+      }
+    }
+  
+    .style-hint {
+      margin-top: 1.2rem;
+      padding: 0.8rem;
+      border-radius: 0.8rem;
+      background: rgba(255, 255, 255, 0.05);
+      font-style: italic;
+      font-size: 0.9rem;
+      text-align: center;
+      color: #bbf;
+      border: 1px dashed #00ffff88;
+    }
+  
+    .tone {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      text-align: center;
+      color: #eee;
+      opacity: 0.75;
+    }
+  }
+  

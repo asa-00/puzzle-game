@@ -1,0 +1,52 @@
+.dev-panel {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    width: 300px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 1px solid #00ffff;
+    box-shadow: 0 0 15px #00ffff33;
+    border-radius: 12px;
+    padding: 1rem;
+    z-index: 9999;
+    color: #e0f7fa;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.95rem;
+  
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #00ffff;
+      text-shadow: 0 0 8px #00ffffaa;
+      border-bottom: 1px solid #00ffff44;
+      padding-bottom: 0.5rem;
+    }
+  
+    p {
+      margin: 0.5rem 0;
+      line-height: 1.3;
+    }
+  
+    ul {
+      list-style: none;
+      padding-left: 1rem;
+      margin: 0.5rem 0 0;
+  
+      li {
+        padding: 0.2rem 0;
+        color: #b2ebf2;
+      }
+    }
+  
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background-color: #00ffff55;
+      border-radius: 3px;
+    }
+  }
+  

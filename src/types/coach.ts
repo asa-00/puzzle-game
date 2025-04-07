@@ -1,0 +1,1 @@
+export type CoachStyle = "zen" | "hype" | "wise" | "chill";

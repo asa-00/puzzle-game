@@ -1,32 +1,86 @@
-// src/components/GameBoard.tsx
-import React, { useState } from 'react';
-import { useGameLogic } from '../hooks/useGameLogic';
+import { motion } from "framer-motion";
 
-const GameBoard: React.FC<{ onEndGame: () => void }> = ({ onEndGame }) => {
-  const { gameState, makeGuess } = useGameLogic();
-  const [guess, setGuess] = useState<number | ''>('');
+interface GameBoardProps {
+  grid: { id: number; active: boolean }[];
+  gridSize: number;
+  handleClick: (index: number) => void;
+  showHint?: boolean;
+  hintIndexes?: number[];
+  unlockedFeatures?: string[];
+  rowHints?: number[][];
+  colHints?: number[][];
+  rowStatuses?: boolean[];
+  colStatuses?: boolean[];
+}
 
-  const handleGuess = () => {
-    if (typeof guess === 'number') {
-      makeGuess(guess);
-      setGuess('');
-    }
-  };
-
+const GameBoard: React.FC<GameBoardProps> = ({
+  grid,
+  gridSize,
+  handleClick,
+  showHint = false,
+  hintIndexes = [],
+  rowHints = [],
+  colHints = [],
+  rowStatuses = [],
+  colStatuses = [],
+  unlockedFeatures = [],
+}) => {
   return (
-    <div className="game-board">
-      <h2>Guess the Number!</h2>
-      <p>Score: {gameState.score}</p>
-      <p>Attempts: {gameState.attempts}</p>
-      <p>Current Target: {gameState.targetNumber}</p>
-      <input
-        type="number"
-        value={guess}
-        onChange={(e) => setGuess(Number(e.target.value))}
-        placeholder="Enter your guess"
-      />
-      <button onClick={handleGuess}>Submit Guess</button>
-      <button onClick={onEndGame}>End Game</button>
+    <div className="board-wrapper">
+      {/* Column Hints */}
+      <div
+        className="col-hints"
+        style={{ gridTemplateColumns: `repeat(${gridSize + 1}, 1fr)` }}
+      >
+     {/*    <div className="empty-cell" />
+        {colHints.map((col, i) => (
+          <div
+            key={i}
+            className={`hint hint-col ${
+              colStatuses[i] === false ? "hint-warning" : ""
+            }`}
+          >
+            {col.join(", ")}
+          </div>
+        ))} */}
+      </div>
+
+      {/* Game Board Rows */}
+      <div
+        className="grid-with-hints"
+        style={{
+          gridTemplateRows: `repeat(${gridSize}, 1fr)`,
+          gridTemplateColumns: `auto repeat(${gridSize}, 1fr)`,
+        }}
+      >
+        {Array.from({ length: gridSize }).map((_, rowIndex) => (
+          <>
+            <div />
+            {/* Grid Cells for the row */}
+            {Array.from({ length: gridSize }).map((_, colIndex) => {
+              const index = rowIndex * gridSize + colIndex;
+              const cell = grid[index];
+              const isHint = showHint && hintIndexes.includes(cell.id);
+              return (
+                <motion.div
+                  key={cell.id}
+                  className={`cell ${cell.active ? "active" : "inactive"} ${
+                    isHint ? "hint" : ""
+                  }
+                  ${
+                    unlockedFeatures?.includes("tileAnimations")
+                      ? "animated"
+                      : ""
+                  }
+                  `}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleClick(cell.id)}
+                />
+              );
+            })}
+          </>
+        ))}
+      </div>
     </div>
   );
 };

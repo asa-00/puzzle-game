@@ -1,0 +1,115 @@
+.start-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url("/assets/images/zen-start-background.jpg");
+  background-size: cover;
+  background-position: center;
+  padding: 2rem;
+  color: #f0f8ff;
+  animation: fadeIn 2s ease-in;
+  text-align: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+
+    .glow {
+      color: #cceeff;
+      text-shadow: 0 0 10px #88ccff, 0 0 25px #88ccff;
+    }
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    color: #d8f0f5;
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+  }
+
+  .coach-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+
+    .coach-card {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(8px);
+      padding: 1rem;
+      border-radius: 16px;
+      width: 140px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      box-shadow: 0 0 12px rgba(136, 204, 255, 0.1);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-4px);
+      }
+
+      &.selected {
+        border-color: #88ccff;
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 20px #88ccff;
+      }
+
+      .emoji {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        color: #cceeff;
+        text-shadow: 0 0 6px #88ccff;
+      }
+
+      p {
+        font-size: 0.8rem;
+        color: #defaff;
+        margin-top: 0.25rem;
+      }
+    }
+  }
+
+  .start-btn {
+    padding: 1rem 2.5rem;
+    font-size: 1.2rem;
+    background: linear-gradient(90deg, #88ccff, #66bbff);
+    color: #003344;
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 0 20px #88ccff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: linear-gradient(90deg, #66bbff, #44aaff);
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,236 @@
+/* CoachPanel.scss */
+
+.coach-panel {
+  position: relative;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+
+  .coach-avatar {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .coach-avatar.pulse {
+    animation: pulseGlow 1.5s infinite;
+  }
+
+  &.mood-confident .coach-avatar {
+    animation: glowBlue 2s ease-in-out infinite;
+  }
+
+  &.mood-focused .coach-avatar {
+    animation: glowGreen 2s ease-in-out infinite;
+  }
+
+  &.mood-struggling .coach-avatar {
+    animation: flickerRed 0.5s infinite alternate;
+  }
+}
+
+.coach-challenge {
+  font-size: 0.9rem;
+  color: #ffe066;
+  margin-top: 0.5rem;
+  animation: pulseChallenge 2s infinite;
+
+  &.completed {
+    color: #00ff99;
+    animation: none;
+  }
+}
+
+.coach-trend {
+  font-size: 0.8rem;
+  margin-top: 4px;
+
+  .trend {
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+
+  .improving {
+    background-color: #d4f9d4;
+    color: #2c7a2c;
+  }
+
+  .declining {
+    background-color: #ffd6d6;
+    color: #c62828;
+  }
+}
+
+.coach-avatar.improving-glow {
+  box-shadow: 0 0 12px 4px rgba(46, 204, 113, 0.7);
+  transition: box-shadow 0.3s ease-in-out;
+  border-radius: 10px;
+}
+
+.coach-avatar {
+  transition: transform 0.3s ease;
+
+  &.pulse-alert {
+    animation: alertPulse 1s infinite alternate;
+  }
+}
+
+.emoji-burst {
+  font-size: 2rem;
+  margin-top: 0.5rem;
+  animation: burstFade 1.8s ease-in-out forwards;
+  color: #ffe066;
+}
+
+.challenge-celebrate {
+  animation: glowPulse 1s ease-in-out infinite alternate;
+  box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.6);
+}
+
+.challenge-popup {
+  background: #222;
+  border: 2px solid #ffdb4d;
+  padding: 8px 16px;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  box-shadow: 0 0 10px #ffdb4d;
+  animation: fadePop 4s ease-in-out;
+}
+
+.pulse-alert {
+  animation: focusAlertPulse 1s infinite alternate;
+  filter: brightness(1.3) saturate(1.2);
+  transform-origin: center;
+}
+
+@keyframes focusAlertPulse {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  100% {
+    transform: scale(1.08);
+    filter: brightness(1.5);
+  }
+}
+
+@keyframes alertPulse {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  100% {
+    transform: scale(1.05);
+    filter: brightness(1.3);
+  }
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.05); filter: brightness(1.2); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+@keyframes fadePop {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.challenge-popup {
+  background: linear-gradient(90deg, #ffef96, #ffe680);
+  padding: 10px 20px;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 1rem;
+  box-shadow: 0 0 10px rgba(255, 223, 0, 0.6);
+  animation: floatPop 4s ease-in-out;
+}
+
+@keyframes floatPop {
+  0% {
+    transform: translateY(-15px);
+    opacity: 0;
+  }
+  15% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  85% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-15px);
+    opacity: 0;
+  }
+}
+
+@keyframes glowPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+  }
+  100% {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  }
+}
+
+@keyframes burstFade {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes pulseChallenge {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+@keyframes glowBlue {
+  0% { text-shadow: 0 0 5px #3cf, 0 0 10px #3cf; }
+  100% { text-shadow: 0 0 15px #3cf, 0 0 30px #3cf; }
+}
+
+@keyframes glowGreen {
+  0% { text-shadow: 0 0 5px #4f8, 0 0 10px #4f8; }
+  100% { text-shadow: 0 0 15px #4f8, 0 0 30px #4f8; }
+}
+
+@keyframes flickerRed {
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.05); color: #f66; }
+}

@@ -1,0 +1,16 @@
+.row-hints {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+    color: #ddd;
+  
+    .hint-row {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      font-family: monospace;
+    }
+  }
+  
