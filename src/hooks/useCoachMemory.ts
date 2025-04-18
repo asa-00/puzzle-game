@@ -1,4 +1,6 @@
 import { useRef } from "react";
+import { Mood } from "../types/coach";
+import usePersistentState from "../hooks/usePersistentState";
 
 export type PlayerStyle = "explorer" | "methodical" | "intuitive" | "risky";
 
@@ -17,9 +19,12 @@ export interface CoachMemory {
   longestStreak: number;
   mistakeRate: number;
   challenge?: { description: string; condition: () => boolean };
+  goalCompletions: Record<string, number[]>;
 }
 
 export function useCoachMemory() {
+  const [persistedGoals, setPersistedGoals] = usePersistentState<Record<string, number[]>>("goalCompletions", {});
+
   const memory = useRef<CoachMemory>({
     successRate: 1,
     recentMoves: [],
@@ -28,6 +33,7 @@ export function useCoachMemory() {
     streak: 0,
     longestStreak: 0,
     mistakeRate: 0,
+    goalCompletions: persistedGoals,
   });
 
   const getHintsUsed = () => memory.current.hintUsage;
@@ -35,6 +41,16 @@ export function useCoachMemory() {
 
   const setChallenge = (description: string, condition: () => boolean) => {
     activeChallenge.current = { description, completed: false, condition };
+  };
+
+  const logGoalCompleted = (strategy: string, level: number) => {
+    if (!memory.current.goalCompletions[strategy]) {
+      memory.current.goalCompletions[strategy] = [];
+    }
+    if (!memory.current.goalCompletions[strategy].includes(level)) {
+      memory.current.goalCompletions[strategy].push(level);
+      setPersistedGoals({ ...memory.current.goalCompletions });
+    }
   };
   
   const checkChallenge = () => {
@@ -88,10 +104,11 @@ export function useCoachMemory() {
       streak: 0,
       longestStreak: 0,
       mistakeRate: 0,
+      goalCompletions: {},
     };
   };
 
-  const analyzeMood = (): "struggling" | "focused" | "confident" => {
+  const analyzeMood = (): Mood => {
     const { successRate, hintUsage, reactionTime } = memory.current;
     const avgReaction = reactionTime.length
       ? reactionTime.reduce((a, b) => a + b, 0) / reactionTime.length
@@ -162,5 +179,6 @@ export function useCoachMemory() {
     setChallenge,
     checkChallenge,
     getChallengeStatus,
+    logGoalCompleted
   };
 }

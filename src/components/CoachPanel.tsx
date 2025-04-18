@@ -4,8 +4,8 @@ import React from "react";
 import { CoachStyle } from "../types/coach";
 import { useCoachMemory } from "../hooks/useCoachMemory";
 import { useVoiceCoach } from "../hooks/useVoiceCoach";
-
-export type Mood = "normal" | "tip" | "praise" | "boost";
+import CoachAvatar from "./CoachAvatar";
+import { Mood } from "../types/coach";
 
 export const challengeIntro = {
   zen: "Let's try this, mindfully 🧘‍♂️:",
@@ -22,7 +22,7 @@ interface CoachPanelProps {
   voiceEnabled: boolean;
   streak: number;
   style: string;
-  tip: string;
+  tip: string | undefined;
   isImproving: boolean;
   challengeCompleted?: boolean;
   unlockedFeatures: string[];
@@ -98,6 +98,15 @@ const CoachPanel: React.FC<CoachPanelProps> = ({
   return (
     <div className={`coach-panel ${moodClass}`}>
       <motion.div
+        animate={shouldAnimate || challengeCompleted ? { scale: [1, 1.1, 1] } : {}}
+        transition={{ duration: 1.5, repeat: shouldAnimate ? Infinity : 0 }}
+      >
+        <CoachAvatar
+          style={personality}
+          mood={mood}
+      />
+      </motion.div>
+{/*       <motion.div
         className={`coach-avatar ${coach.animation} ${
           isImproving ? "improving-glow" : ""} 
           ${challengeCompleted ? "challenge-celebrate" : ""}
@@ -113,7 +122,7 @@ const CoachPanel: React.FC<CoachPanelProps> = ({
         <span className="emoji" role="img" aria-label="Coach">
           {coach.emoji}
         </span>
-      </motion.div>
+      </motion.div> */}
       {challengeCompleted && (
         <motion.div
           className="challenge-popup"

@@ -74,7 +74,7 @@ const config = {
       },
     ],
   },
-  devtool: 'source-map',
+  devtool: 'eval-cheap-module-source-map',
   devServer: {
     static: {
       directory: path.join(__dirname, 'dist'),

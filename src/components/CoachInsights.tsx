@@ -1,10 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { CoachMemory, PlayerStyle } from "../hooks/useCoachMemory";
+import { Mood } from "../types/coach";
 
 interface CoachInsightsProps {
   memory: CoachMemory;
-  mood: "struggling" | "focused" | "confident";
+  mood: Mood;
   style: PlayerStyle;
   strategy: string;
   streak: number;

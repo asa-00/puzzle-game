@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import usePersistentState from "../hooks/usePersistentState";
+import { CoachStyle } from "../types/coach";
 
 interface StartScreenProps {
   onStart: () => void;
@@ -43,7 +45,7 @@ const coachOptions: {
 ];
 
 const StartScreen: React.FC<StartScreenProps> = ({ onStart, setCoachStyle }) => {
-  const [selectedStyle, setSelectedStyle] = useState<"zen" | "hype" | "wise" | "chill">("zen");
+  const [selectedStyle, setSelectedStyle] = usePersistentState<CoachStyle>("coachStyle", "zen");
 
   const speakPreview = (text: string) => {
     const utterance = new SpeechSynthesisUtterance(text);

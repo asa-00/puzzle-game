@@ -12,11 +12,12 @@ import Leaderboard from "./components/Leaderboard";
 import LevelUpPopup from "./components/LevelUpPopup";
 import DevPanel from "./components/DevPanel";
 import CoachChallenge from "./components/CoachChallenge";
-import ColHints from "./components/ColHints";
+import PatternPreview from "./components/PatternPreview";
+import ModifierIntro from "./components/ModifierIntro";
 import "./styles/main.scss";
 import { usePlayerProfile } from "./hooks/usePlayerProfile";
 import { useGameEventTracker } from "./hooks/useGameEventTracker";
-import { useCoachAI } from "./hooks/useCoachAI";
+import { closingLines, levelUpLines, useCoachAI } from "./hooks/useCoachAI";
 import { useCoachMemory } from "./hooks/useCoachMemory";
 import CoachInsights from "./components/CoachInsights";
 import startSound from "../assets/sounds/start-button.mp3";
@@ -26,6 +27,7 @@ import correctSound from "../assets/sounds/correct.mp3";
 import wrongSound from "../assets/sounds/wrong.mp3";
 import levelUpSound from "../assets/sounds/level-up.mp3";
 import hintSound from "../assets/sounds/hint.mp3";
+import bonusSound from "../assets/sounds/bonus.mp3";
 import { useDailyCoach } from "./hooks/useDailyCoach";
 import { useVoiceCoach } from "./hooks/useVoiceCoach";
 import { speak } from "./utils/voiceCoach";
@@ -33,7 +35,14 @@ import { saveDailyStats } from "./utils/dailyCoach";
 import { CoachStyle } from "./types/coach";
 import CoachPanel from "./components/CoachPanel";
 import DailyMessage from "./components/DailyMessage";
-import { inactiveMessages, improvementMessages, lowFocusFeedback, focusMessages } from "./utils/constants";
+import GoalMedalPopup from "./components/GoalMedalPopup";
+import {
+  inactiveMessages,
+  improvementMessages,
+  lowFocusFeedback,
+  focusMessages,
+} from "./utils/constants";
+import ModifierDisplay from "./components/ModifierDisplay";
 
 const MAX_WRONG_GUESSES = 500;
 const MAX_MISTAKES = 5;
@@ -45,7 +54,12 @@ const styleCooldowns: Record<CoachStyle, number> = {
   chill: 12000,
 };
 
-const App = () => {
+const App = ({
+  previewMode = false,
+  previewLevel = 1,
+  previewStyle = "zen",
+  debugHints = false,
+}) => {
   const {
     grid,
     gridSize,
@@ -77,14 +91,23 @@ const App = () => {
     focus,
     levelTimer,
     scoreSaved,
-    resetGame
-  } = useGameLogic();
+    resetGame,
+    modifiers,
+    bonusTileIndex,
+    bonusActive,
+    timeBonus,
+    mistakeBonus,
+    strategyName,
+    goal,
+    goalCompleted,
+  } = useGameLogic({ levelOverride: previewMode ? previewLevel : undefined });
 
   const [playStart] = useSound(startSound, { volume: 0.2 });
   const [playCorrect] = useSound(correctSound, { volume: 0.2 });
   const [playWrong] = useSound(wrongSound, { volume: 0.2 });
   const [playHint] = useSound(hintSound, { volume: 0.2 });
-  const [playChallengeSound] = useSound(challangeCompleted, { volume: 0.3 });
+  const [playBonusSound] = useSound(bonusSound, { volume: 0.2 });
+  const [playChallengeSound] = useSound(challangeCompleted, { volume: 0.2 });
   const [playBgMusic, { stop: stopBgMusic }] = useSound(bgMusic, {
     volume: 0.08,
     loop: true,
@@ -95,7 +118,7 @@ const App = () => {
   const { events, logEvent } = useGameEventTracker();
   const playerType = usePlayerProfile(events);
   const [coachStyle, setCoachStyle] = useState<CoachStyle>(
-    (localStorage.getItem("coachStyle") as CoachStyle) || "zen"
+    (localStorage.getItem("coachStyle") as CoachStyle) || previewStyle
   );
   const { getChallengeStatus } = useCoachMemory();
   const challenge = getChallengeStatus();
@@ -122,6 +145,9 @@ const App = () => {
   const lowFocusThreshold = 30;
   const isLowFocus = focus <= lowFocusThreshold;
   const [showStartScreen, setShowStartScreen] = useState(false);
+  const [showPatternPreview, setShowPatternPreview] = useState(false);
+  const [modifierIntro, setModifierIntro] = useState<string | null>(null);
+  const [showGoalPopup, setShowGoalPopup] = useState(false);
 
   useEffect(() => {
     if (voiceEnabled && !dailyMessageSpoken && gameStarted) {
@@ -135,7 +161,7 @@ const App = () => {
 
   useEffect(() => {
     if (!voiceEnabled || gameOver || !gameStarted) return;
-  
+
     if (focus < 30 && !lowFocusSpoken) {
       speak(focusMessages[coachStyle], coachStyle);
       setLowFocusSpoken(true);
@@ -143,7 +169,6 @@ const App = () => {
       setLowFocusSpoken(false);
     }
   }, [focus, voiceEnabled, coachStyle, lowFocusSpoken, gameStarted, gameOver]);
- 
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -213,6 +238,7 @@ const App = () => {
     rowStatuses,
     colStatuses,
     personality: coachStyle,
+    strategyName 
   });
 
   const coachFeedback = generateFeedback();
@@ -259,6 +285,11 @@ const App = () => {
     if (soundEnabled) {
       wasCorrect ? playCorrect() : playWrong();
     }
+
+    if (index === bonusTileIndex && !grid[index].active && bonusActive) {
+      if (soundEnabled) playBonusSound();
+      toast("🎉 Bonus tile hit!");
+    }
   };
 
   const handleStart = () => {
@@ -268,9 +299,15 @@ const App = () => {
     setWrongGuesses(0);
     setInactiveTime(0);
     setHintStepIndex(0);
-    if (soundEnabled) playStart();
-    if (soundEnabled) playBgMusic();
+    setDailyMessageSpoken(false);
     setChallengeReminderSpoken(false);
+    setLowFocusSpoken(false);
+    setShowPatternPreview(true);
+
+    if (soundEnabled) {
+      playStart();
+      playBgMusic();
+    }
   };
 
   const handleBackToStart = () => {
@@ -364,6 +401,18 @@ const App = () => {
   }, [showInsights]);
 
   useEffect(() => {
+    if (justLeveledUp && levelUpInfo) {
+      console.log("🎯 Level up info:", levelUpInfo);
+      const newModifier = levelUpInfo.unlocks.find((f) =>
+        ["mirrorX", "rotate90", "shuffleRows"].includes(f)
+      );
+      if (newModifier) {
+        setModifierIntro(newModifier);
+      }
+    }
+  }, [justLeveledUp, levelUpInfo]);
+
+  useEffect(() => {
     if (gameOver || justLeveledUp) {
       saveDailyStats({
         date: new Date().toLocaleDateString(),
@@ -373,6 +422,12 @@ const App = () => {
       });
     }
   }, [gameOver, justLeveledUp]);
+
+  useEffect(() => {
+    if (justLeveledUp && levelUpInfo?.newModifier) {
+      setModifierIntro(levelUpInfo.newModifier);
+    }
+  }, [justLeveledUp, levelUpInfo]);
 
   useEffect(() => {
     if (justLeveledUp && levelUpInfo) {
@@ -391,6 +446,14 @@ const App = () => {
     return () => clearTimeout(timer);
   }, [grid, gameStarted, gameOver, hintDelay]);
 
+  useEffect(() => {
+    if (goalCompleted) {
+      toast("🎯 Smart goal achieved!");
+      setShowGoalPopup(true);
+      coachMemory.logGoalCompleted(strategyName, currentLevel);
+    }
+  }, [goalCompleted]);
+
   if (gameOver) {
     return (
       <GameOverScreen
@@ -400,6 +463,23 @@ const App = () => {
         onBackToStart={handleBackToStart}
         leaderboard={leaderboard}
         scoreSaved={scoreSaved}
+      />
+    );
+  }
+
+  if (showPatternPreview) {
+    return (
+      <PatternPreview
+        pattern={pattern}
+        gridSize={gridSize}
+        duration={3000}
+        onComplete={() => {
+          setShowPatternPreview(false);
+          startGame();
+        }}
+        coachStyle={coachStyle}
+        voiceEnabled={voiceEnabled}
+        modifiers={modifiers}
       />
     );
   }
@@ -415,6 +495,7 @@ const App = () => {
         autoClose={3000}
         hideProgressBar
       />
+      {showGoalPopup && <GoalMedalPopup onClose={() => setShowGoalPopup(false)} />}
       <div className="score-board">
         Score: {score} | Level: {difficulty} | 🌱 Progression Level:{" "}
         {currentLevel}
@@ -463,6 +544,7 @@ const App = () => {
         </div>
       )}
       <div className="game-board-container">
+        {modifiers.length > 0 && <ModifierDisplay modifiers={modifiers} />}
         <CoachPanel
           feedback={coachFeedback.message}
           playerType={playerType}
@@ -471,9 +553,7 @@ const App = () => {
           voiceEnabled={voiceEnabled}
           streak={coachMemory.getStreak()}
           style={coachFeedback.style.styleTip}
-          tip={
-            unlockedFeatures.includes("advancedCoach") ? coachFeedback.tip : ""
-          }
+          tip={unlockedFeatures.includes("advancedCoach") ? coachFeedback.tip : ""}
           isImproving={coachMemory.isImproving()}
           challengeCompleted={coachMemory.getChallengeStatus()?.completed}
           unlockedFeatures={unlockedFeatures}
@@ -485,15 +565,7 @@ const App = () => {
           focusMeter={focus}
           maxMistakes={MAX_MISTAKES}
         />
-        <div className="game-board-with-hints">
-          <div>
-            {/*       <ColHints
-              colHints={colHints}
-              colStatuses={colStatuses}
-              gridSize={gridSize}
-            /> */}
-            <div style={{ display: "flex" }}>
-              <RowHints rowHints={rowHints} rowStatuses={rowStatuses} />
+        <div className="game-board-with-hints">              
               <GameBoard
                 grid={grid}
                 gridSize={gridSize}
@@ -505,9 +577,11 @@ const App = () => {
                 colHints={colHints}
                 rowStatuses={rowStatuses}
                 colStatuses={colStatuses}
+                modifiers={modifiers}
+                bonusTileIndex={bonusTileIndex}
+                bonusActive={bonusActive}
+                debugHints={debugHints}
               />
-            </div>
-          </div>
         </div>
         {showDevPanel && <DevPanel memory={coachMemory.memory} />}
       </div>
@@ -518,12 +592,45 @@ const App = () => {
           personality={coachStyle}
         />
       )}
-      {justLeveledUp && levelUpInfo && (
+      {justLeveledUp && levelUpInfo && !modifierIntro && (
         <LevelUpPopup
           level={levelUpInfo.level}
           unlocks={levelUpInfo.unlocks}
           reward={levelUpInfo.reward}
-          onClose={clearLevelUpInfo}
+          timeBonus={timeBonus}
+          mistakeBonus={mistakeBonus}
+          coachStyle={coachStyle}
+          voiceEnabled={voiceEnabled}
+          onClose={() => {
+            clearLevelUpInfo();
+
+            if (voiceEnabled) {
+              speak(levelUpLines[coachStyle], coachStyle);
+            }
+
+            const newModifier = levelUpInfo.unlocks.find((f) =>
+              ["mirrorX", "rotate90", "shuffleRows"].includes(f)
+            );
+            if (newModifier) {
+              setTimeout(() => {
+                setModifierIntro(newModifier);
+              }, 1500);
+            }
+          }}
+        />
+      )}
+
+      {modifierIntro && (
+        <ModifierIntro
+          modifier={modifierIntro}
+          coachStyle={coachStyle}
+          voiceEnabled={voiceEnabled}
+          onClose={() => {
+            if (voiceEnabled) {
+              speak(closingLines[coachStyle], coachStyle);
+            }
+            setModifierIntro(null);
+          }}
         />
       )}
       {showInsights && (

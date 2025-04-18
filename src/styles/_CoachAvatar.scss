@@ -1,0 +1,106 @@
+// styles/components/CoachAvatar.scss
+.coach-avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    position: relative;
+  
+    svg {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      transition: all 0.3s ease-in-out;
+      z-index: 1;
+    }
+  
+    .coach-glow {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      filter: blur(6px);
+      z-index: 0;
+      opacity: 0.6;
+      animation: pulseGlow 2s infinite;
+    }
+  
+    .name {
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+      color: #ccc;
+      text-transform: capitalize;
+    }
+  
+    // Mood states
+    &.mood-praise svg {
+      transform: scale(1.1);
+    }
+  
+    &.mood-tip svg {
+      filter: drop-shadow(0 0 4px #00ffcc);
+    }
+  
+    &.mood-error svg {
+      filter: drop-shadow(0 0 6px red);
+      animation: shake 0.4s;
+    }
+    
+    &.mood-normal svg {
+      opacity: 1;
+      filter: none;
+    }
+    
+  
+    // Coach style-based color glows
+    &.style-zen .coach-glow {
+      background: #a3e4d7;
+    }
+  
+    &.style-hype .coach-glow {
+      background: #ff6f61;
+    }
+  
+    &.style-wise .coach-glow {
+      background: #8e44ad;
+    }
+  
+    &.style-chill .coach-glow {
+      background: #5dade2;
+    }
+  }
+  
+  @keyframes pulseGlow {
+    0% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+  }
+  
+  @keyframes shake {
+    0% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-3px);
+    }
+    50% {
+      transform: translateX(3px);
+    }
+    75% {
+      transform: translateX(-3px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  

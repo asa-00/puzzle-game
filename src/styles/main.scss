@@ -7,7 +7,6 @@
 @use './GameOverScreen';
 @use './Leaderboard';
 @use './CoachPanel';
-@use './LevelUpModal';
 @use './LevelUpPopup';
 @use './ProgressionDashboard';
 @use './DevPanel';
@@ -15,4 +14,9 @@
 @use './DailyMessage';
 @use './CoachInsights';
 @use './CoachChallenge';
+@use './PatternPreview';
+@use './NextLevelGameplay';
+@use './ModifierIntro.scss';
+@use './CoachAvatar.scss';
+@use './_GoalMedalPopup.scss';
 @use '../App';
