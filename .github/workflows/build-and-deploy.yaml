@@ -10,6 +10,9 @@ permissions:
   contents: write
 
 jobs:
+  pass-secrets-to-workflow:
+    uses: ./.github/workflows/build-and-deploy.yml
+    secrets: inherit
   deploy:
     runs-on: ubuntu-latest
     steps:
