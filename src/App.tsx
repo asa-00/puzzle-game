@@ -238,7 +238,7 @@ const App = ({
     rowStatuses,
     colStatuses,
     personality: coachStyle,
-    strategyName 
+    strategyName,
   });
 
   const coachFeedback = generateFeedback();
@@ -370,7 +370,7 @@ const App = ({
     }
   }, [currentLevel]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (!voiceEnabled || challengeReminderSpoken) return;
     const challenge = coachMemory.getChallengeStatus();
 
@@ -378,7 +378,7 @@ const App = ({
       speak(`Today's challenge: ${challenge.description}`, coachStyle);
       setChallengeReminderSpoken(true);
     }
-  }, [currentLevel, coachMemory.getChallengeStatus()]);
+  }, [currentLevel, coachMemory.getChallengeStatus()]); */
 
   useEffect(() => {
     const challenge = coachMemory.getChallengeStatus();
@@ -495,7 +495,9 @@ const App = ({
         autoClose={3000}
         hideProgressBar
       />
-      {showGoalPopup && <GoalMedalPopup onClose={() => setShowGoalPopup(false)} />}
+      {showGoalPopup && (
+        <GoalMedalPopup onClose={() => setShowGoalPopup(false)} />
+      )}
       <div className="score-board">
         Score: {score} | Level: {difficulty} | 🌱 Progression Level:{" "}
         {currentLevel}
@@ -553,7 +555,9 @@ const App = ({
           voiceEnabled={voiceEnabled}
           streak={coachMemory.getStreak()}
           style={coachFeedback.style.styleTip}
-          tip={unlockedFeatures.includes("advancedCoach") ? coachFeedback.tip : ""}
+          tip={
+            unlockedFeatures.includes("advancedCoach") ? coachFeedback.tip : ""
+          }
           isImproving={coachMemory.isImproving()}
           challengeCompleted={coachMemory.getChallengeStatus()?.completed}
           unlockedFeatures={unlockedFeatures}
@@ -565,23 +569,23 @@ const App = ({
           focusMeter={focus}
           maxMistakes={MAX_MISTAKES}
         />
-        <div className="game-board-with-hints">              
-              <GameBoard
-                grid={grid}
-                gridSize={gridSize}
-                handleClick={handleClick}
-                showHint={showHint}
-                hintIndexes={getHint()}
-                unlockedFeatures={unlockedFeatures}
-                rowHints={rowHints}
-                colHints={colHints}
-                rowStatuses={rowStatuses}
-                colStatuses={colStatuses}
-                modifiers={modifiers}
-                bonusTileIndex={bonusTileIndex}
-                bonusActive={bonusActive}
-                debugHints={debugHints}
-              />
+        <div className="game-board-with-hints">
+          <GameBoard
+            grid={grid}
+            gridSize={gridSize}
+            handleClick={handleClick}
+            showHint={showHint}
+            hintIndexes={getHint()}
+            unlockedFeatures={unlockedFeatures}
+            rowHints={rowHints}
+            colHints={colHints}
+            rowStatuses={rowStatuses}
+            colStatuses={colStatuses}
+            modifiers={modifiers}
+            bonusTileIndex={bonusTileIndex}
+            bonusActive={bonusActive}
+            debugHints={debugHints}
+          />
         </div>
         {showDevPanel && <DevPanel memory={coachMemory.memory} />}
       </div>
