@@ -5,9 +5,10 @@ interface StatusBarProps {
   consecutiveMistakes: number;
   maxMistakes: number;
   focusMeter: number; // 0–100
+  streak: number;
 }
 
-const StatusBar: React.FC<StatusBarProps> = ({ timer, consecutiveMistakes, maxMistakes, focusMeter }) => {
+const StatusBar: React.FC<StatusBarProps> = ({ timer, consecutiveMistakes, maxMistakes, focusMeter, streak }) => {
   return (
     <div className="status-bar">
       <div className="status-item">⏳ Time: {timer}s</div>
@@ -17,6 +18,9 @@ const StatusBar: React.FC<StatusBarProps> = ({ timer, consecutiveMistakes, maxMi
         <div className="focus-meter">
           <div className="focus-fill" style={{ width: `${focusMeter}%` }} />
         </div>
+      </div>
+      <div className="status-item">
+        <div className="coach-streak">🔥 Streak: {streak}</div>
       </div>
     </div>
   );

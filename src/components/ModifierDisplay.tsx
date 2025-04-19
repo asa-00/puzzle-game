@@ -1,6 +1,5 @@
 // ✅ ModifierDisplay.tsx - visar ikoner för aktiva modifierare
 import React from "react";
-import Tooltip from "react-tooltip-lite";
 
 interface ModifierDisplayProps {
   modifiers: string[];

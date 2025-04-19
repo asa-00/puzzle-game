@@ -495,9 +495,9 @@ const App = ({
         autoClose={3000}
         hideProgressBar
       />
-      {showGoalPopup && (
+    {/*   {showGoalPopup && (
         <GoalMedalPopup onClose={() => setShowGoalPopup(false)} />
-      )}
+      )} */}
       <div className="score-board">
         Score: {score} | Level: {difficulty} | 🌱 Progression Level:{" "}
         {currentLevel}
@@ -545,6 +545,13 @@ const App = ({
           <button onClick={handleUseHint}>Show Hint</button>
         </div>
       )}
+      <StatusBar
+        timer={levelTimer}
+        consecutiveMistakes={consecutiveMistakes}
+        focusMeter={focus}
+        maxMistakes={MAX_MISTAKES}
+        streak={coachMemory.getStreak()}
+      />
       <div className="game-board-container">
         {modifiers.length > 0 && <ModifierDisplay modifiers={modifiers} />}
         <CoachPanel
@@ -562,12 +569,6 @@ const App = ({
           challengeCompleted={coachMemory.getChallengeStatus()?.completed}
           unlockedFeatures={unlockedFeatures}
           lowFocus={isLowFocus}
-        />
-        <StatusBar
-          timer={levelTimer}
-          consecutiveMistakes={consecutiveMistakes}
-          focusMeter={focus}
-          maxMistakes={MAX_MISTAKES}
         />
         <div className="game-board-with-hints">
           <GameBoard

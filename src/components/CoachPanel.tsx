@@ -94,13 +94,13 @@ const CoachPanel: React.FC<CoachPanelProps> = ({
     triggerVoice("streak");
   }
 
-  const capitalize = (s: string) => s && String(s[0]).toUpperCase() + String(s).slice(1); 
   return (
     <div className={`coach-panel ${moodClass}`}>
       <motion.div
         animate={shouldAnimate || challengeCompleted ? { scale: [1, 1.1, 1] } : {}}
         transition={{ duration: 1.5, repeat: shouldAnimate ? Infinity : 0 }}
       >
+        {voiceEnabled && <p className="coach-voice">🗣️ Voice enabled</p>}
         <CoachAvatar
           style={personality}
           mood={mood}
@@ -134,7 +134,7 @@ const CoachPanel: React.FC<CoachPanelProps> = ({
           🎯 Challenge Complete!
         </motion.div>
       )}
-      <motion.div
+{/*       <motion.div
         key={feedback} 
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
@@ -143,10 +143,8 @@ const CoachPanel: React.FC<CoachPanelProps> = ({
         style={{ color: coach.color }}
       >
         <strong>Coach style: {capitalize(coach.style)}</strong><br />{feedback}
-      </motion.div>
+      </motion.div> */}
       {tip && <div className="coach-tip">💡 {tip}</div>}
-      <div className="coach-streak">🔥 Streak: {streak}</div>
-      {voiceEnabled && <p className="coach-voice">🗣️ Voice enabled</p>}
       {challenge && (
         <div
           className={`coach-challenge ${

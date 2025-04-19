@@ -66,12 +66,12 @@ const GameBoard: React.FC<GameBoardProps> = ({
         style={{ gridTemplateColumns: `repeat(${gridSize + 1}, 1fr)` }}
       >
         <div className="col-hint-row">
-        <div className="hint-spacer" />
+     {/*    <div className="hint-spacer" />
         <ColHints    
               colHints={colHints}
               colStatuses={colStatuses}
               gridSize={gridSize}
-            />
+            /> */}
       </div>
         {/* <div className="empty-cell" />
         {colHints.map((col, i) => (
