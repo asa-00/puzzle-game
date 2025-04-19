@@ -10,7 +10,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/',
+    publicPath: '/fractazen/'
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss'],
