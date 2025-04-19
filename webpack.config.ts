@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
+const json = require('json-loader');
 require('dotenv').config();
 
 const config = {
@@ -63,6 +64,19 @@ const config = {
         exclude: /node_modules/,
       },
       {
+        test: /\.(json)$/,
+        include: path.resolve(__dirname, 'assets/animations'),
+        type: 'javascript/auto',
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'assets/animations/[name].[ext]'
+            }
+          }
+        ]
+      },
+      {
         test: /\.(mp3|wav)$/i,
         use: [
           {
@@ -92,7 +106,7 @@ const config = {
     new CopyPlugin({
       patterns: [
         { from: "./src/preview.html", to: "." },
-        { from: "./src/landing.html", to: "." },
+        { from: "./src/landing.html", to: "." }
       ],
     }),
     new webpack.DefinePlugin({
