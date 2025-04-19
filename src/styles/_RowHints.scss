@@ -1,16 +1,29 @@
 .row-hints {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-right: 0.5rem;
-    font-size: 0.8rem;
-    color: #ddd;
-  
-    .hint-row {
-      height: 75px;
-      display: flex;
-      align-items: center;
-      font-family: monospace;
-    }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 0.5rem;
+  gap: 0.3rem;
+}
+
+.hint.hint-row {
+  font-size: 0.85rem;
+  text-align: right;
+  color: #ccc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 3.5rem;
+
+  &.correct {
+    color: #66e0c0;
+    font-weight: bold;
   }
-  
+}
+
+@media (max-width: 600px) {
+  .hint.hint-row {
+    font-size: 0.75rem;
+    max-width: 2.5rem;
+  }
+}

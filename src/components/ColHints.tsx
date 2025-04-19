@@ -10,12 +10,13 @@ interface ColHintsProps {
     return (
       <div
         className="col-hints"
-        style={{ gridTemplateColumns: `repeat(${gridSize + 1}, 1fr)` }}
+        style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
       >
-        <div className="empty-cell" />
         {colHints.map((hint, i) => (
           <div key={i} className={`hint hint-col ${colStatuses[i] ? "correct" : ""}`}>
-            {hint.join(", ")}
+            {hint.map((value, j) => (
+              <span key={j}>{value}</span>
+            ))}
           </div>
         ))}
       </div>

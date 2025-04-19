@@ -1,0 +1,32 @@
+.col-hints {
+    display: grid;
+    justify-items: center;
+    align-items: end;
+    margin-bottom: 0.5rem;
+    gap: 0.3rem;
+  }
+  
+  .hint.hint-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #ccc;
+    white-space: nowrap;
+  
+    span {
+      line-height: 1.1;
+    }
+  
+    &.correct {
+      color: #66e0c0;
+      font-weight: bold;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .hint.hint-col {
+      font-size: 0.75rem;
+    }
+  }
+  

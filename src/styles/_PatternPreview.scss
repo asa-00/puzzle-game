@@ -3,121 +3,78 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  padding: 2rem;
-  animation: fadeIn 0.5s ease-out;
-  .text-container {
-    z-index: 12;
-    position: relative;
-  }
-  &.logical {
-    background: radial-gradient(circle at center, #0d1b2a, #000);
-    border: 2px solid #00ffaa;
-    box-shadow: 0 0 20px #00ffaa;
-    .preview-heading {
-      color: #00ffaa;
-    }
-  }
+  text-align: center;
+  padding: 1rem;
+  gap: 1rem;
 
-  .preview-heading {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    color: #ffe177;
-    text-shadow: 0 0 8px #ffe177;
-    text-align: center;
+  .strategy-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffffffcc;
   }
 
   .strategy-label {
-    font-size: 1rem;
+    font-size: 0.875rem;
     color: #aaa;
-    margin-bottom: 1.5rem;
-    font-style: italic;
-    text-align: center;
+    margin-top: 0.2rem;
+  }
+
+  .grid-preview {
+    display: grid;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+    width: fit-content;
+    height: fit-content;
+    max-width: 90vw;
+    max-height: 90vw;
+  }
+
+  .preview-cell {
+    width: 2.4rem;
+    height: 2.4rem;
+    aspect-ratio: 1 / 1;
+    border-radius: 4px;
+    background-color: #ffffff22;
+    &.active {
+      background-color: #66e0c0;
+      box-shadow: 0 0 6px rgba(102, 224, 192, 0.7);
+    }
   }
 
   .countdown {
-    font-size: 1rem;
+    font-size: 2rem;
     font-weight: bold;
-    color: #00ffff;
-    margin-top: 1.5rem;
-    animation: pulseTimer 1s infinite ease-in-out;
-    text-shadow: 0 0 8px #00ffff;
-    text-align: center;
+    color: #66e0c0;
+    animation: pulse 1s infinite;
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+
+  .countdown.done {
+    animation: fadeout 0.5s forwards;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes fadeout {
+    0% { opacity: 1; }
+    100% { opacity: 0; transform: scale(0.95); }
   }
 }
 
-.preview-grid {
-  display: grid;
-  gap: 4px;
-  margin: 1rem 0;
-  transition: all 0.3s ease;
-}
-
-.preview-cell {
-  width: 36px;
-  height: 36px;
-  background-color: #222;
-  border: 1px solid #444;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
-}
-
-.preview-cell.active {
-  background-color: #00ffff;
-  animation: pulseZoom 1.2s infinite ease-in-out;
-}
-
-@keyframes pulseZoom {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 0px #00ffff66;
-  }
-  50% {
-    transform: scale(1.1);
-    box-shadow: 0 0 6px #00ffffaa;
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 0px #00ffff66;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes pulseIn {
-  0% {
-    transform: scale(0.9);
-    opacity: 0.6;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes pulseTimer {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.75;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
+@media (max-width: 600px) {
+  .pattern-preview {
+    .strategy-name {
+      font-size: 1rem;
+    }
+    .strategy-label {
+      font-size: 0.75rem;
+    }
+    .countdown {
+      font-size: 1.5rem;
+    }
   }
 }

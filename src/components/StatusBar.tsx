@@ -6,12 +6,18 @@ interface StatusBarProps {
   maxMistakes: number;
   focusMeter: number; // 0–100
   streak: number;
+  score: number;
+  difficulty: number;
+  currentLevel: number;
 }
 
-const StatusBar: React.FC<StatusBarProps> = ({ timer, consecutiveMistakes, maxMistakes, focusMeter, streak }) => {
+const StatusBar: React.FC<StatusBarProps> = ({ timer, consecutiveMistakes, maxMistakes, focusMeter, streak, score, difficulty, currentLevel }) => {
   return (
     <div className="status-bar">
-      <div className="status-item">⏳ Time: {timer}s</div>
+      <div className="status-item">🧮 Score: {score}</div>
+      <div className="status-item">🪜 Level: {difficulty}</div>
+      <div className="status-item">🌱 Progression: {currentLevel}</div>
+      <div className="status-item timer">⏳ Time: {timer}s</div>
       <div className="status-item">💥 Mistakes: {consecutiveMistakes}/{maxMistakes}</div>
       <div className="status-item focus">
         🧠 Focus:

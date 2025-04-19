@@ -35,7 +35,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
   bonusTileIndex,
   bonusActive,
   mutationEffect = false,
-  debugHints = false
+  debugHints = false,
 }) => {
   const isMirroredX = modifiers.includes("mirrorX");
   const isMirroredY = modifiers.includes("mirrorY");
@@ -66,13 +66,13 @@ const GameBoard: React.FC<GameBoardProps> = ({
         style={{ gridTemplateColumns: `repeat(${gridSize + 1}, 1fr)` }}
       >
         <div className="col-hint-row">
-     {/*    <div className="hint-spacer" />
+          {/*    <div className="hint-spacer" />
         <ColHints    
               colHints={colHints}
               colStatuses={colStatuses}
               gridSize={gridSize}
             /> */}
-      </div>
+        </div>
         {/* <div className="empty-cell" />
         {colHints.map((col, i) => (
           <div
@@ -88,39 +88,36 @@ const GameBoard: React.FC<GameBoardProps> = ({
 
       {/* Game Board Rows */}
       <div className="board-grid">
-      <RowHints rowHints={rowHints} rowStatuses={rowStatuses} />
-      <div
-        className="grid-with-hints"
-        style={{
-          gridTemplateRows: `repeat(${gridSize}, 1fr)`,
-          gridTemplateColumns: `auto repeat(${gridSize}, 1fr)`,
-        }}
-      >
-        {Array.from({ length: gridSize }).map((_, rowIndex) => (
-          <>
-            <div />
-            {Array.from({ length: gridSize }).map((_, colIndex) => {
-              const index = rowIndex * gridSize + colIndex;
-              const transformed = transformedIndex(index);
-              const cell = grid[transformed];
-              const isHint = (showHint || debugHints) && hintIndexes.includes(cell.id);
-              const isBonus = bonusActive && cell.id === bonusTileIndex;
+        <RowHints rowHints={rowHints} rowStatuses={rowStatuses} />
+        <div className="grid-with-hints">
+          {Array.from({ length: gridSize }).map((_, rowIndex) => (
+            <div className="row" key={rowIndex}>
+              {Array.from({ length: gridSize }).map((_, colIndex) => {
+                const index = rowIndex * gridSize + colIndex;
+                const transformed = transformedIndex(index);
+                const cell = grid[transformed];
+                const isHint =
+                  (showHint || debugHints) && hintIndexes.includes(cell.id);
+                const isBonus = bonusActive && cell.id === bonusTileIndex;
 
-              return (
-                <motion.div
-                  key={cell.id}
-                  className={`cell ${cell.active ? "active" : "inactive"} ${isHint ? "hint" : ""}
-                  ${
-                    unlockedFeatures?.includes("tileAnimations") ? "animated" : ""
-                  } ${isBonus ? "bonus" : ""}`}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleClick(cell.id)}
-                />
-              );
-            })}
-          </>
-        ))}
-      </div>
+                return (
+                  <motion.div
+                    key={cell.id}
+                    className={`cell ${cell.active ? "active" : "inactive"} ${
+                      isHint ? "hint" : ""
+                    } ${
+                      unlockedFeatures?.includes("tileAnimations")
+                        ? "animated"
+                        : ""
+                    } ${isBonus ? "bonus" : ""}`}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => handleClick(cell.id)}
+                  />
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

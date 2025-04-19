@@ -43,6 +43,7 @@ import {
   focusMessages,
 } from "./utils/constants";
 import ModifierDisplay from "./components/ModifierDisplay";
+import SettingsBoard from "./components/SettingsBoard";
 
 const MAX_WRONG_GUESSES = 500;
 const MAX_MISTAKES = 5;
@@ -149,7 +150,7 @@ const App = ({
   const [modifierIntro, setModifierIntro] = useState<string | null>(null);
   const [showGoalPopup, setShowGoalPopup] = useState(false);
 
-  useEffect(() => {
+/*   useEffect(() => {
     if (voiceEnabled && !dailyMessageSpoken && gameStarted) {
       const message = getDailyCoachMessage(); //
       const utterance = new SpeechSynthesisUtterance(message);
@@ -157,7 +158,7 @@ const App = ({
       speechSynthesis.speak(utterance);
       setDailyMessageSpoken(true);
     }
-  }, [gameStarted, voiceEnabled, dailyMessageSpoken]);
+  }, [gameStarted, voiceEnabled, dailyMessageSpoken]); */
 
   useEffect(() => {
     if (!voiceEnabled || gameOver || !gameStarted) return;
@@ -495,65 +496,33 @@ const App = ({
         autoClose={3000}
         hideProgressBar
       />
-    {/*   {showGoalPopup && (
+      {/*   {showGoalPopup && (
         <GoalMedalPopup onClose={() => setShowGoalPopup(false)} />
       )} */}
-      <div className="score-board">
-        Score: {score} | Level: {difficulty} | 🌱 Progression Level:{" "}
-        {currentLevel}
-        <div className="settings-bar">
-          <label>
-            <input
-              type="checkbox"
-              checked={voiceEnabled}
-              onChange={(e) => setVoiceEnabled(e.target.checked)}
-            />
-            🔊 Voice Coach
-          </label>
-          <label style={{ marginLeft: "1rem" }}>
-            🔊 Sound:
-            <input
-              type="checkbox"
-              checked={soundEnabled}
-              onChange={() => setSoundEnabled(!soundEnabled)}
-            />
-          </label>
-          <label style={{ marginLeft: "1rem" }}>
-            💡 Auto Hint:
-            <input
-              type="checkbox"
-              checked={autoHintEnabled}
-              onChange={() => setAutoHintEnabled(!autoHintEnabled)}
-            />
-          </label>
-          <label style={{ marginLeft: "1rem" }}>
-            🧠 Insights:
-            <input
-              type="checkbox"
-              checked={showInsights}
-              onChange={() => setShowInsights((prev) => !prev)}
-            />
-          </label>
-        </div>
-        {dailyMessageSpoken && (
+      <SettingsBoard
+        voiceEnabled={voiceEnabled}
+        setVoiceEnabled={setVoiceEnabled}
+        soundEnabled={soundEnabled}
+        setSoundEnabled={setSoundEnabled}
+        autoHintEnabled={autoHintEnabled}
+        setAutoHintEnabled={setAutoHintEnabled}
+        showInsights={showInsights}
+        setShowInsights={setShowInsights}
+      />
+ {/*        {dailyMessageSpoken && (
           <DailyMessage message={getDailyCoachMessage()} style={coachStyle} />
-        )}
-      </div>
-      {hintAvailable && !showHint && unlockedFeatures.includes("hint") && (
-        <div className="hint-prompt">
-          <p>Stuck? Want a hint?</p>
-          <button onClick={handleUseHint}>Show Hint</button>
-        </div>
-      )}
+        )} */}
       <StatusBar
         timer={levelTimer}
         consecutiveMistakes={consecutiveMistakes}
         focusMeter={focus}
         maxMistakes={MAX_MISTAKES}
         streak={coachMemory.getStreak()}
+        score={score}
+        difficulty={difficulty}
+        currentLevel={currentLevel}
       />
       <div className="game-board-container">
-        {modifiers.length > 0 && <ModifierDisplay modifiers={modifiers} />}
         <CoachPanel
           feedback={coachFeedback.message}
           playerType={playerType}
@@ -571,6 +540,13 @@ const App = ({
           lowFocus={isLowFocus}
         />
         <div className="game-board-with-hints">
+          {modifiers.length > 0 && <ModifierDisplay modifiers={modifiers} />}
+          {hintAvailable && !showHint && unlockedFeatures.includes("hint") && (
+            <div className="hint-prompt">
+              <p>Stuck? Want a hint?</p>
+              <button onClick={handleUseHint}>Show Hint</button>
+            </div>
+          )}
           <GameBoard
             grid={grid}
             gridSize={gridSize}

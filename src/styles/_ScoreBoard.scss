@@ -1,0 +1,49 @@
+.settings-board {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: #e0e0e0;
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  
+    .score-values {
+      font-weight: 500;
+      color: #ffffffcc;
+      text-align: center;
+    }
+  
+    .settings-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+  
+      label {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.875rem;
+        color: #ddd;
+  
+        input[type='checkbox'] {
+          transform: scale(1.2);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .settings-board {
+      font-size: 0.85rem;
+  
+      .settings-bar {
+        gap: 0.6rem;
+      }
+    }
+  }
+  

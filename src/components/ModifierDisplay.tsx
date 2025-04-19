@@ -10,6 +10,10 @@ const modifierLabels: Record<string, string> = {
   mirrorY: "Mirror Vertically",
   rotate90: "Rotate 90°",
   shuffleRows: "Shuffle Rows",
+  bonusTile: "Bonus Tile Active",
+  timeBonus: "Time Bonus Enabled",
+  mistakeBonus: "Mistake Bonus Enabled",
+  ghostTiles: "Ghost Tiles"
 };
 
 const ModifierDisplay: React.FC<ModifierDisplayProps> = ({ modifiers }) => {
