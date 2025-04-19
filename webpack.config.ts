@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 require('dotenv').config();
 
 const config = {
@@ -87,6 +88,12 @@ const config = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: 'index.html',
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: "./src/preview.html", to: "." },
+        { from: "./src/landing.html", to: "." },
+      ],
     }),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(process.env),
