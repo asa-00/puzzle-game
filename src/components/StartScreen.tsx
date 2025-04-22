@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import usePersistentState from "../hooks/usePersistentState";
 import { CoachStyle } from "../types/coach";
+import backgroundUrl from '../../assets/images/zen-start-background.jpg';
 
 interface StartScreenProps {
   onStart: () => void;
@@ -66,7 +67,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStart, setCoachStyle }) => 
   };
 
   return (
-    <div className="start-screen">
+    <div className="start-screen" style={{ backgroundImage: `url(${backgroundUrl})` }}>
       <h1>🌌<span className="glow">FractaZen</span></h1>
       <p>Select your coach style:</p>
 

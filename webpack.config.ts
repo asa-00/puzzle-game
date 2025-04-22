@@ -10,8 +10,9 @@ const config = {
   mode: 'development',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/puzzle-game'
+    filename: '[name].[contenthash].js',
+    publicPath: '/', 
+    chunkFilename: '[name].[contenthash].chunk.js',
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.scss'],
@@ -64,14 +65,35 @@ const config = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(json)$/,
+        test: /\.json$/,
         include: path.resolve(__dirname, 'assets/animations'),
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/animations/[name].[ext]'
+        }
+      },
+      {
+        test: /\.json$/,
+        exclude: path.resolve(__dirname, 'assets/animations'),
         type: 'javascript/auto',
+        use: [
+          {
+            loader: 'json-loader',
+            options: {
+              esModule: true
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(png|jpe?g|gif|webp)$/i,
         use: [
           {
             loader: 'file-loader',
             options: {
-              name: 'assets/animations/[name].[ext]'
+              name: 'assets/images/[name].[ext]',
+              outputPath: 'assets/images/',
+              publicPath: '/assets/images/'
             }
           }
         ]
@@ -106,7 +128,11 @@ const config = {
     new CopyPlugin({
       patterns: [
         { from: "./src/preview.html", to: "." },
-        { from: "./src/landing.html", to: "." }
+        { from: "./src/landing.html", to: "." },
+        { 
+          from: "node_modules/howler/dist/howler.js",
+          to: "vendors/[name].[ext]" 
+        },
       ],
     }),
     new webpack.DefinePlugin({

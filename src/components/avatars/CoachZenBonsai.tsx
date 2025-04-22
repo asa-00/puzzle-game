@@ -1,31 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Lottie from "lottie-react";
+import zenAvatar from '../../../assets/images/zen-avatar-bonsai.gif';
 
-// Define strict types for animation data
-type AnimationData = {
-  v: string;
-  meta: {
-    g: string;
-    a: string;
-    k: string;
-    d: string;
-    tc: string;
-  };
-  fr: number;
-  ip: number;
-  op: number;
-  w: number;
-  h: number;
-  nm: string;
-  ddd: number;
-  assets: Array<{
-    id: string;
-    layers: unknown[];
-  }>;
-  layers: unknown[];
-};
-
-// Define component props with strict types
 interface CoachZenWithBonsaiProps {
   size?: number;
   mood?: string;
@@ -35,73 +10,43 @@ const CoachZenWithBonsai: React.FC<CoachZenWithBonsaiProps> = ({
   size = 120,
   mood = "neutral"
 }) => {
-  // State management for animation data and errors
-  const [animationData, setAnimationData] = useState<AnimationData | null>();
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Memoized symbol getter function
   const getSymbol = useCallback((mood: string = "neutral"): string => {
     switch (mood.toLowerCase()) {
       case "praise":
-        return "✨"; // Sparkles
+        return "✨";
       case "tip":
-        return "⚡"; // Lightning
+        return "⚡"; 
       case "error":
-        return "⚠"; // Warning
+        return "⚠"; 
       case "chill":
-        return "☁"; // Cloud
+        return "☁"; 
       default:
-        return "☼"; // Sun/star
+        return "☼"; 
     }
   }, []);
 
-  // Load animation data safely
   useEffect(() => {
-    const loadAnimationData = async () => {
-      try {
-        const response = await fetch("../../../assets/animations/zen-avatar-bonsai.json");
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
-        const data = await response.json();
-        if (!data.v || !data.meta) {
-          throw new Error("Invalid animation data structure");
-        }
-        setAnimationData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load animation");
-        console.error("Animation loading failed:", err);
-      }
-    };
-
-    loadAnimationData();
-  }, []);
-
-  const generateOptions = useCallback((): Record<string, unknown> => ({
-    animationData,
-    loop: true,
-    autoplay: true,
-  }), [animationData]);
+    const img = new Image();
+    img.onload = () => setImageSrc(img.src);
+    img.onerror = () => setError('Failed to load image');
+    img.src = zenAvatar;
+  }, [zenAvatar]);
 
   if (error) {
     return (
-      <div style={{ textAlign: 'center', color: '#ff4444', fontSize: '16px' }}>
+      <div style={{ color: '#ff4444' }}>
         Error loading zen avatar: {error}
       </div>
     );
   }
-
-  if (!animationData) {
-    return (
-      <div style={{ textAlign: 'center', color: '#666', fontSize: '16px' }}>
-        Loading zen avatar...
-      </div>
-    );
-  }
-
+  
   const symbol = getSymbol(mood);
-
   return (
-    <div
+    <div style={{ width: size, height: size }}>
+      <div
       style={{
         position: "relative",
         width: size,
@@ -155,18 +100,22 @@ const CoachZenWithBonsai: React.FC<CoachZenWithBonsaiProps> = ({
           {symbol}
         </text>
       </svg>
-
-      {/* Zen animation in front */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          zIndex: 2,
-        }}
-      >
-        <Lottie animationData={undefined} {...generateOptions()} style={{ width: size, height: size }} />
-      </div>
+      {imageSrc ? (
+        <img
+          src={imageSrc}
+          alt="Zen Avatar"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain'
+          }}
+        />
+      ) : (
+        <div style={{ color: '#666' }}>
+          Loading zen avatar...
+        </div>
+      )}
+    </div>
     </div>
   );
 };

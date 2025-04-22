@@ -1,4 +1,5 @@
 // src/utils/voiceCoach.ts
+
 export const speak = (
     message: string,
     personality: "zen" | "hype" | "wise" | "chill" = "zen",
@@ -20,8 +21,8 @@ export const speak = (
     };
   
     const style = voiceMap[personality];
-    utterance.pitch = style.pitch;
-    utterance.rate = style.rate;
+    utterance.pitch = style?.pitch;
+    utterance.rate = style?.rate;
   
     const voices = synth.getVoices();
     if (voices.length > 0) {
