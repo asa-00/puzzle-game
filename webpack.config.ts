@@ -5,13 +5,15 @@ const CopyPlugin = require("copy-webpack-plugin");
 const json = require('json-loader');
 require('dotenv').config();
 
+const publicPath = '/puzzle-game/'
+
 const config = {
   entry: './src/index.tsx',
   mode: 'development',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[contenthash].js',
-    publicPath: '/', 
+    publicPath: publicPath, 
     chunkFilename: '[name].[contenthash].chunk.js',
   },
   resolve: {
@@ -93,7 +95,7 @@ const config = {
             options: {
               name: 'assets/images/[name].[ext]',
               outputPath: 'assets/images/',
-              publicPath: '/assets/images/'
+              publicPath: `${publicPath}assets/images/`
             }
           }
         ]
